@@ -185,7 +185,7 @@
             <div class="container">
               <div class="carousel-caption">
                 <h1>Another example headline.</h1>
-                <p>Some representative placeholder content for the second slide of the carousel.</p>
+                <p>Some representative placeholder content.</p>
                 <p><a class="btn btn-lg btn-primary" href="#">예약하기</a></p>
               </div>
             </div>
