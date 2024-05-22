@@ -26,9 +26,33 @@
     </insert>
     
     <select id="selectRoomListPayN" resultType="Map" parameterType="String">
-	    SELECT room_nm AS title
-	    	,  reser_dt AS date
-		FROM TB_RESER
-		WHERE PAY_YN = 'N'
+	    SELECT 
+	    	room_nm AS title
+	     ,  reser_dt AS date
+		FROM
+			TB_RESER
+		WHERE
+			PAY_YN = 'N'
+		<if test="startDate != null">
+	        AND reser_dt = #{startDate}
+	    </if>
+	</select>
+	
+	<select id="selectRoomListDate" resultType="Map" parameterType="String">
+	    SELECT
+			TRE.ROOM_NM
+		  , TRE.RESER_PRC
+		  , TRE.RESER_DT
+		  , TRO.ROOM_SIZE 
+		  , TRO.STNDR_PPL 
+		  , TRO.MAX_PPL 
+		FROM
+			TB_RESER TRE
+		LEFT JOIN 
+			TB_ROOM TRO ON TRE.ROOM_NM = TRO.ROOM_NM  
+		WHERE 
+			TRE.RESER_DT = #{startDate}
+		AND
+			TRE.PAY_YN = 'N'
 	</select>
 </mapper>

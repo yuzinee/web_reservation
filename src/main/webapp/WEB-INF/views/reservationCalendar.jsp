@@ -38,6 +38,7 @@
 </body>
 
 <script>
+	var calendar;
 
     $(document).ready(function() {
         // Tab event
@@ -71,13 +72,31 @@
       		"queryId" : "userReservationDAO.selectRoomListPayN"
       	}
       	
-      	com_selectList(param, function(e) {
+      	com_selectList(param, function(reservationList) {
       		var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
+            calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
-                events: e,
-                dateClick: function(info) {
-                    console.log(info);
+                events: reservationList,
+                eventClick : function(info) {
+                	// 클릭된 이벤트에 대한 타이틀을 가져옴
+	                var roomNm = info.event.title;
+	                
+	                // 클릭된 이벤트의 시작 날짜를 가져옴
+	                var startDate = info.event.start;
+	
+	                // 날짜에 하루를 추가
+	                var adjustedDate = new Date(startDate);
+	                adjustedDate.setDate(adjustedDate.getDate() + 1);
+	
+	                // 날짜를 원하는 형식으로 변환 (예: YYYY-MM-DD)
+	                var formattedDate = adjustedDate.toISOString().split('T')[0];
+	
+	                // 타이틀과 날짜를 콘솔에 출력
+	                console.log('Event Title: ', roomNm);
+	                console.log('Event Start Date: ', formattedDate);
+	                
+	                location.href = 'http://localhost:8083/reservationList?startDate='+formattedDate;
+
                 },
                 displayEventTime: false
             });
