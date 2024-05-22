@@ -19,7 +19,7 @@
 			<thead>
 				<tr>
 					<th>객실명</th>
-					<th>이용일</th>
+					<th>이용날짜</th>
 					<th>인원</th>
 					<th>결제금액</th>
 					<th>추가요금</th>
@@ -36,58 +36,81 @@
 			<tbody>
 				<tr>
 					<th>성함 *</th>
-					<td><input type="text"/></td>
+					<td><input type="text" id="userNm"/></td>
 				</tr>
 				<tr>
 					<th>생년월일 *</th>
-					<td><input type="text"/></td>
+					<td><input type="text" id="userBirth"/></td>
 				</tr>
 				<tr>
 					<th>연락처 *</th>
-					<td><input type="text"/> - <input type="text"/> - <input type="text"/></td>
+					<td><input type="text" id="userNbr1"/> - <input type="text"/> - <input type="text"/></td>
 				</tr>
 				<tr>
 					<th>비상연락처</th>
-					<td><input type="text"/> - <input type="text"/> - <input type="text"/></td>
-				</tr>
-				<tr>
-					<th>이메일</th>
-					<td><input type="text"/></td>
+					<td><input type="text" id="userNbr2"/> - <input type="text"/> - <input type="text"/></td>
 				</tr>
 				<tr>
 					<th>요청사항</th>
-					<td><input type="text"/></td>
+					<td><input type="text" id="userRemark"/></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	
-	<h2>약관동의</h2>
+	<h2>안내사항 및 약관동의</h2>
+	
+	<input type="button" id="btnReservation" value="예약" onclick="btnReservationOnclick()"/>
 </body>
 
 <script>
-	$(document).ready(
-			function() {
-				var roomList = JSON
-						.parse(localStorage.getItem("selectedRooms"));
+	var reservationList = [];
 
-				console.log(roomList);
-
-				var tableBody = $("#tbRoom tbody");
-
-				$.each(roomList, function(index, item) {
-					var row = $("<tr>");
-					row.append($("<td>").text(item.roomNm));
-					row.append($("<td>").text(' '));
-					row.append($("<td>").text(item.ppl + "인"));
-					row.append($("<td>").text(item.price));
-					// 마지막 현장결제 td에만 rowspan 추가
-					if (index === 0) { // 첫 번째 행에만 추가
-						row.append($("<td rowspan='" + roomList.length + "'>")
-								.text("현장결제"));
-					}
-					tableBody.append(row);
-				});
-			});
+	$(document).ready(function() {
+		setReservation(); // 선택목록 세팅
+	});
+	
+	/* 선택목록 세팅 */
+	function setReservation() {
+		reservationList = JSON.parse(localStorage.getItem("selectedRooms"));
+		
+		console.log(reservationList);
+		
+		var tableBody = $("#tbRoom tbody");
+		
+		$.each(reservationList, function(index, item) {
+			var row = $("<tr>");
+			row.append($("<td>").text(item.roomNm));
+			row.append($("<td>").text(item.startDate+" ~ "+item.endDate));
+			row.append($("<td>").text(item.ppl + "인"));
+			row.append($("<td>").text(item.price));
+			if (index === 0) { 
+				row.append($("<td rowspan='" + reservationList.length + "'>").text("현장결제"));
+			}
+			
+			tableBody.append(row);
+		});
+		
+		localStorage.removeItem("selectedRooms");
+	}
+	
+	function btnReservationOnclick() {
+		for(var i=0; i<reservationList.length; i++){
+			reservationList[i]["userNm"] = $("#userNm").val();
+			reservationList[i]["userBirth"] = $("#userBirth").val();
+			reservationList[i]["userNbr1"] = $("#userNbr1").val();
+			reservationList[i]["userNbr2"] = $("#userNbr2").val();
+			reservationList[i]["userRemark"] = $("#userRemark").val();
+		}
+		
+		var param = {
+			"queryId" : "userReservationDAO.updateReservation"
+		  , "reservationList" : reservationList
+		}
+		
+		com_insert(param, function(){
+			console.log("update");
+		})
+	}
 </script>
 </html>

@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/tab1.css">
+<link rel="stylesheet" type="text/css" href="/css/table1.css">
 <script src="/js/common.js"></script>
 <!-- Full Calendar -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
@@ -24,15 +25,66 @@
 <body>
     <div class="tab">
         <ul class="tabnav">
-            <li><a href="#tab01">탭1</a></li>
-            <li><a href="#tab02">탭2</a></li>
+            <li><a href="#tab01">실시간예약</a></li>
+            <li><a href="#tab02">예약확인/취소</a></li>
         </ul>
         <div class="tabcontent">
             <div id="tab01">
                 <button id="openButton">Open</button>
                 <div id='calendar'></div>
             </div>
-            <div id="tab02">tab2 content</div>
+            <div id="tab02">
+            	<h2>예약정보입력</h2>
+            	<div role="region" aria-label="data table" tabindex="0" class="primary">
+					<table id="tbUserInfo">
+						<tbody>
+							<tr>
+								<th>성함</th>
+								<td><input type="text" id="userNm"/></td>
+							</tr>
+							<tr>
+								<th>연락처</th>
+								<td><input type="text" id="userNbr"/> - <input type="text"/> - <input type="text"/></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<input type="button" id="btnConfirm" value="예약확인 및 취소" onclick="btnConfirmOnclick()"/>
+				<div id="divReservationInfo" style="display: none">
+					<h2>예약내역</h2>
+	            	<div role="region" aria-label="data table" tabindex="0" class="primary">
+						<table id="tbReservationInfo">
+							<tbody>
+								<tr>
+									<th>객실</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>이용날짜</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>방문객 수</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>결제금액</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>결제일</th>
+									<td></td>
+								</tr>
+								<tr>
+									<th>예약확정여부</th>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<input type="button" id="btnCancel" value="예약취소" onclick="btnConfirmOnclick()"/>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -135,6 +187,23 @@
               	
             com_insert(insertParam);
         })    
+    }
+    
+    /* 예약확인 및 취소 click */
+    function btnConfirmOnclick(){
+    	var param = {
+    		"queryId" 	: "userReservationDAO.selectReservationConfirm"
+    	  , "userNm" 	: $("#userNm").val()
+    	  , "userNbr"	: $("#userNbr").val()
+    	}
+    	
+    	com_selectList(param, function(data){
+    		console.log(data);
+    		if(data.length >= 1){
+    			$("#btnConfirm").hide();
+    			$("#divReservationInfo").show();
+    		}
+    	})
     }
 </script>
 </html>

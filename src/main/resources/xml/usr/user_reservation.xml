@@ -55,4 +55,32 @@
 		AND
 			TRE.PAY_YN = 'N'
 	</select>
+	
+	<update id="updateReservation">
+		<foreach collection="reservationList" item="item" separator=";">
+			UPDATE TB_RESER
+			SET
+			    RESER_NM = #{item.userNm}
+			  , RESER_PPL = #{item.ppl}
+			  , RESER_NBR1 = #{item.userNbr1}
+			  , RESER_NBR2 = #{item.userNbr2}
+			  , PAY_DT = TO_CHAR(NOW(), 'YYYY-MM-DD HH24:MI:SS')
+			  , PAY_PRC = #{item.price}
+			  , PAY_YN = 'O'
+			WHERE
+				ROOM_NM = #{item.roomNm}
+			AND
+				RESER_DT = #{item.startDate}
+		</foreach>
+	</update>
+	
+	<select id="selectReservationConfirm" resultType="Map" parameterType="String">
+	    SELECT *
+		FROM
+			TB_RESER
+		WHERE
+			RESER_NM = #{userNm}
+	    AND 
+	    	RESER_NBR1 = #{userNbr}
+	</select>
 </mapper>
