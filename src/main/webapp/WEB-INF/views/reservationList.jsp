@@ -15,6 +15,8 @@
 </style>
 
 <body>
+  <h2 id="useDate"></h2>
+
   <h2>객실 선택</h2>
   
   <div role="region" aria-label="data table" tabindex="0" class="primary">
@@ -38,15 +40,25 @@
 </body>
 
 <script>
+	var startDate = '';
+	var endDate = '';
+	
     $(document).ready(function() {
+    	startDate = com_getParameter('startDate');
+    	console.log(startDate);
+    	
+    	var date = new Date(startDate);
+    	date.setDate(date.getDate() + 1);
+    	endDate = date.toISOString().split('T')[0];
+    	
+    	$('#useDate').text(startDate + " ~ " + endDate);
+    	
     	var param = {
     		"queryId" : "userReservationDAO.selectRoomListDate"
-    	  , "startDate" : com_getParameter('startDate')
+    	  , "startDate" : startDate
     	}
     	
     	com_selectList(param, function(data){
-    		console.log(data);
-    		
     		var tableBody = $("#tbRoom tbody");
 
             $.each(data, function(index, item) {
@@ -75,10 +87,13 @@
             var checkbox = $(row).find("input[type='checkbox']");
             if (checkbox.is(":checked")) {
                 var roomInfo = {
-                    roomNm: $(row).find("td:first-child").text(),
-                    ppl: $(row).find("select").val(),
-                    price: $(row).find("td:nth-child(5)").text()
+                    roomNm: $(row).find("td:first-child").text()
+                  , ppl: $(row).find("select").val()
+                  , price: $(row).find("td:nth-child(5)").text()
+                  , startDate: startDate
+                  , endDate: endDate
                 };
+                
                 selectedRooms.push(roomInfo);
             }
         });
