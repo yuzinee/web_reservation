@@ -5,9 +5,9 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="/js/common.js"></script>
+<script src="/js/com/common.js"></script>
 <!-- table -->
-<link rel="stylesheet" type="text/css" href="/css/table1.css">
+<link rel="stylesheet" type="text/css" href="/css/com/table1.css">
 <title>title</title>
 </head>
 
@@ -103,7 +103,7 @@
         // 선택된 객실 정보를 로컬 스토리지에 저장
         localStorage.setItem("selectedRooms", JSON.stringify(selectedRooms));
 
-        location.href = "http://localhost:8083/reservationInfo";
+        location.href = "http://localhost:8083/usr/reservationInfo";
     }
 </script>
 </html>

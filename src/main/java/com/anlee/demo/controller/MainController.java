@@ -24,11 +24,11 @@ public class MainController {
 	MainService mainService;
 	
 	// 화면 전환
-	@RequestMapping("/{url}")
-	public String otherController(@PathVariable("url") String url, HttpServletRequest request) {
+	@RequestMapping("/{url1}/{url2}")
+	public String otherController(@PathVariable("url1") String url1, @PathVariable("url2") String url2, HttpServletRequest request) {
 		HttpSession session = request.getSession(false);
 		
-		return url;
+		return url1+"/"+url2;
 	}
 
 	// 단건 조회

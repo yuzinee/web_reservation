@@ -5,9 +5,9 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/tab1.css">
-<link rel="stylesheet" type="text/css" href="/css/table1.css">
-<script src="/js/common.js"></script>
+<link rel="stylesheet" type="text/css" href="/css/com/tab1.css">
+<link rel="stylesheet" type="text/css" href="/css/com/table1.css">
+<script src="/js/com/common.js"></script>
 <!-- Full Calendar -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <title>title</title>
@@ -124,7 +124,7 @@
 	                adjustedDate.setDate(adjustedDate.getDate() + 1);
 	                var formattedDate = adjustedDate.toISOString().split('T')[0];
 	                
-	                location.href = 'http://localhost:8083/reservationList?startDate='+formattedDate;
+	                location.href = 'http://localhost:8083/usr/reservationList?startDate='+formattedDate;
 
                 }
               , displayEventTime: false

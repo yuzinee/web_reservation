@@ -6,9 +6,9 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="/js/common.js"></script>
+<script src="/js/com/common.js"></script>
 <!-- table -->
-<link rel="stylesheet" type="text/css" href="/css/table1.css">
+<link rel="stylesheet" type="text/css" href="/css/com/table1.css">
 <title>title</title>
 </head>
 
