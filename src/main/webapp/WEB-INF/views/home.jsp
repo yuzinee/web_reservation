@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="/js/common.js"></script>
-    <title>title</title>
+    <title>ㅇㅇ펜션</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
