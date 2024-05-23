@@ -15,10 +15,42 @@
 </style>
 
 <body>
-  <h2 id="useDate"></h2>
+  <h2 id="pnsNm"></h2>
+  <div role="region" aria-label="data table" tabindex="0" class="primary">
+    <table id="tbPns">
+      <tbody>
+      	<tr>
+          <th>주소</th>
+          <td id="pnsAdr"></td>
+        </tr>
+        <tr>
+          <th>전화번호</th>
+          <td id="pnsNbr"></td>
+        </tr>
+        <tr>
+          <th>체크인</th>
+          <td id="checkIn"></td>
+        </tr>
+        <tr>
+          <th>체크아웃</th>
+          <td id="checkOut"></td>
+        </tr>
+        <tr>
+          <th>추가요금</th>
+          <td id="addPrice"></td>
+        </tr>
+        <tr>
+          <th>기타</th>
+          <td id="ect"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <h2>객실 선택</h2>
-  
+  <h2>이용날짜</h2>
+  <span id="useDate"></span>
+
+  <h2>객실선택</h2>
   <div role="region" aria-label="data table" tabindex="0" class="primary">
     <table id="tbRoom">
       <thead>
@@ -44,8 +76,25 @@
 	var endDate = '';
 	
     $(document).ready(function() {
+    	// 펜션정보 세팅
+    	var param = {
+    		"queryId" : "userReservationDAO.selectPnsData"
+    	}
+    	
+    	com_selectOne(param, function(data){
+    		console.log(data);
+    		
+    		$("#pnsNm").text(data.pns_nm);
+    		$("#pnsAdr").text(data.pns_adr);
+    		$("#pnsNbr").text(data.pns_nbr);
+    		$("#checkIn").text(data.check_in);
+    		$("#checkOut").text(data.check_out);
+    		$("#addPrice").text("추가인원: "+data.add_ppl+", 바베큐: "+data.add_bbq);
+    		$("#etc").text(' ');
+    	})
+    	
+    	// 이용날짜 세팅
     	startDate = com_getParameter('startDate');
-    	console.log(startDate);
     	
     	var date = new Date(startDate);
     	date.setDate(date.getDate() + 1);
@@ -53,6 +102,7 @@
     	
     	$('#useDate').text(startDate + " ~ " + endDate);
     	
+    	// 객실선택 세팅
     	var param = {
     		"queryId" : "userReservationDAO.selectRoomListDate"
     	  , "startDate" : startDate
@@ -97,8 +147,6 @@
                 selectedRooms.push(roomInfo);
             }
         });
-		
-        console.log(selectedRooms);
         
         // 선택된 객실 정보를 로컬 스토리지에 저장
         localStorage.setItem("selectedRooms", JSON.stringify(selectedRooms));
