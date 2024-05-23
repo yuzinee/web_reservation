@@ -44,7 +44,7 @@
 							</tr>
 							<tr>
 								<th>연락처</th>
-								<td><input type="text" id="userNbr"/> - <input type="text"/> - <input type="text"/></td>
+								<td><input type="text" id="userNbr1_1"/> - <input type="text" id="userNbr1_2"/> - <input type="text" id="userNbr1_3"/></td>
 							</tr>
 						</tbody>
 					</table>
@@ -54,35 +54,22 @@
 					<h2>예약내역</h2>
 	            	<div role="region" aria-label="data table" tabindex="0" class="primary">
 						<table id="tbReservationInfo">
-							<tbody>
-								<tr>
-									<th>객실</th>
-									<td></td>
-								</tr>
-								<tr>
-									<th>이용날짜</th>
-									<td></td>
-								</tr>
-								<tr>
-									<th>방문객 수</th>
-									<td></td>
-								</tr>
-								<tr>
-									<th>결제금액</th>
-									<td></td>
-								</tr>
-								<tr>
-									<th>결제일</th>
-									<td></td>
-								</tr>
-								<tr>
-									<th>예약확정여부</th>
-									<td></td>
-								</tr>
-							</tbody>
-						</table>
+				        	<thead>
+						        <tr>						        	
+						            <th>선택</th>
+						            <th>객실</th>
+						            <th>이용날짜</th>
+						            <th>방문인원</th>
+						            <th>결제금액</th>
+						            <th>결제일</th>
+						            <th>예약확정여부</th>
+						        </tr>
+				      	    </thead>
+				      		<tbody>
+				        	</tbody>
+				    	</table>
 					</div>
-					<input type="button" id="btnCancel" value="예약취소" onclick="btnConfirmOnclick()"/>
+					<input type="button" id="btnCancel" value="예약취소" onclick="btnCancelOnclick()"/>
                 </div>
             </div>
         </div>
@@ -119,7 +106,6 @@
 	
     /* Calendar load */
     function calendarLoad(){
-    	
     	var param = {
       		"queryId" : "userReservationDAO.selectRoomListPayN"
       	}
@@ -127,30 +113,21 @@
       	com_selectList(param, function(reservationList) {
       		var calendarEl = document.getElementById('calendar');
             calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: reservationList,
-                eventClick : function(info) {
-                	// 클릭된 이벤트에 대한 타이틀을 가져옴
+                initialView	: 'dayGridMonth'
+              , events		: reservationList
+              , eventClick 	: function(info) {
 	                var roomNm = info.event.title;
-	                
-	                // 클릭된 이벤트의 시작 날짜를 가져옴
 	                var startDate = info.event.start;
 	
-	                // 날짜에 하루를 추가
+	                // +1일
 	                var adjustedDate = new Date(startDate);
 	                adjustedDate.setDate(adjustedDate.getDate() + 1);
-	
-	                // 날짜를 원하는 형식으로 변환 (예: YYYY-MM-DD)
 	                var formattedDate = adjustedDate.toISOString().split('T')[0];
-	
-	                // 타이틀과 날짜를 콘솔에 출력
-	                console.log('Event Title: ', roomNm);
-	                console.log('Event Start Date: ', formattedDate);
 	                
 	                location.href = 'http://localhost:8083/reservationList?startDate='+formattedDate;
 
-                },
-                displayEventTime: false
+                }
+              , displayEventTime: false
             });
 
             calendar.render();
@@ -180,9 +157,9 @@
         	var room = e;
         	
         	var insertParam = {
-              	"queryId" : "userReservationDAO.insertReservationList"
-              , "room" : room
-              , "date" : formattedDates
+              	"queryId" 	: "userReservationDAO.insertReservationList"
+              , "room"	  	: room
+              , "date" 		: formattedDates
             }
               	
             com_insert(insertParam);
@@ -194,16 +171,55 @@
     	var param = {
     		"queryId" 	: "userReservationDAO.selectReservationConfirm"
     	  , "userNm" 	: $("#userNm").val()
-    	  , "userNbr"	: $("#userNbr").val()
+    	  , "userNbr"	: $("#userNbr1_1").val() + '-' + $("#userNbr1_2").val() + '-' + $("#userNbr1_3").val()
     	}
     	
     	com_selectList(param, function(data){
-    		console.log(data);
     		if(data.length >= 1){
     			$("#btnConfirm").hide();
     			$("#divReservationInfo").show();
+    			
+    			data.forEach(function(data) {
+    				var row = $("<tr>");
+    				row.append($("<td>").append($("<input>").attr("type", "checkbox")));
+    				row.append($("<td>").text(data.room_nm));
+    				row.append($("<td>").text(data.reser_dt));
+    				row.append($("<td>").text(data.reser_ppl));
+    				row.append($("<td>").text(data.reser_prc));
+    				row.append($("<td>").text(data.pay_dt));
+    				row.append($("<td>").text(data.pay_yn === 'O' ? '대기' : '확정'));
+    				
+    				$("#tbReservationInfo tbody").append(row);
+    	        });
     		}
     	})
+    }
+    
+    /* 예약취소 click */
+    function btnCancelOnclick(){
+    	var checkedRows = [];
+
+        $("#tbReservationInfo tbody tr").each(function() {
+            var checkbox = $(this).find("input[type='checkbox']");
+
+            if (checkbox.is(":checked")) {
+                var rowData = {
+                	"roomNm"	: $(this).find("td:nth-child(2)").text()
+                  , "reserDt"	: $(this).find("td:nth-child(3)").text()
+                };
+                
+                checkedRows.push(rowData);
+            }
+        });
+		
+        var param = {
+        	"queryId" 		: "userReservationDAO.updateReservationCancel"
+          , "cancelList"	: checkedRows
+        }
+        
+        com_update(param, function(){
+
+        })
     }
 </script>
 </html>

@@ -44,11 +44,11 @@
 				</tr>
 				<tr>
 					<th>연락처 *</th>
-					<td><input type="text" id="userNbr1"/> - <input type="text"/> - <input type="text"/></td>
+					<td><input type="text" id="userNbr1_1"/> - <input type="text" id="userNbr1_2"/> - <input type="text" id="userNbr1_3"/></td>
 				</tr>
 				<tr>
 					<th>비상연락처</th>
-					<td><input type="text" id="userNbr2"/> - <input type="text"/> - <input type="text"/></td>
+					<td><input type="text" id="userNbr2_1"/> - <input type="text" id="userNbr2_2"/> - <input type="text" id="userNbr2_3"/></td>
 				</tr>
 				<tr>
 					<th>요청사항</th>
@@ -98,8 +98,8 @@
 		for(var i=0; i<reservationList.length; i++){
 			reservationList[i]["userNm"] = $("#userNm").val();
 			reservationList[i]["userBirth"] = $("#userBirth").val();
-			reservationList[i]["userNbr1"] = $("#userNbr1").val();
-			reservationList[i]["userNbr2"] = $("#userNbr2").val();
+			reservationList[i]["userNbr1"] = $("#userNbr1_1").val() + '-' + $("#userNbr1_2").val() + '-' + $("#userNbr1_3").val()
+			reservationList[i]["userNbr2"] = $("#userNbr2_1").val() + '-' + $("#userNbr2_2").val() + '-' + $("#userNbr2_3").val()
 			reservationList[i]["userRemark"] = $("#userRemark").val();
 		}
 		
