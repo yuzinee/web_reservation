@@ -4,11 +4,65 @@
 	<!-- 예약 조회 -->
 	<select id="selectReserList" resultType="Map" parameterType="String">
         SELECT 
-        	room_nm AS title
-	     ,  reser_dt AS date
+        	CONCAT(room_nm, 
+			    CASE 
+			        WHEN pay_yn = 'O' THEN ' (예약대기)'
+			        WHEN pay_yn = 'Y' THEN ' (예약확정)'
+			    END) AS title
+		  , reser_dt AS date
 		FROM 
 			TB_RESER
 		WHERE
 			RESER_DT LIKE CONCAT(#{date}, '%')
     </select>
+    
+    <!-- 예약 상세조회 -->
+    <select id="selectReserInfo" resultType="Map" parameterType="String">
+        SELECT *
+		FROM 
+			TB_RESER 
+		WHERE 
+			ROOM_NM = #{roomNm}
+		AND 
+			RESER_DT = #{reserDt}
+    </select>
+    
+    <!-- 예약 확정 -->
+	<update id="updateReserConfirm">
+		UPDATE TB_RESER 
+		SET
+			PAY_YN = 'Y'
+		WHERE
+			ROOM_NM = #{roomNm}
+		AND
+			RESER_DT = #{reserDt}
+	</update>
+	
+	<!-- 예약 취소 -->
+	<update id="updateReserCancel">
+		UPDATE TB_RESER
+			SET
+			    RESER_NM = ''
+			  , RESER_PPL = ''
+			  , RESER_NBR1 = ''
+			  , RESER_NBR2 = ''
+			  , PAY_DT = ''
+			  , PAY_PRC = ''
+			  , PAY_YN = 'N'
+			WHERE
+				ROOM_NM = #{roomNm}
+			AND
+				RESER_DT = #{reserDt}
+	</update>
+	
+	<!-- 가격 수정 -->
+	<update id="updateReserPrice">
+		UPDATE TB_RESER
+			SET
+			    RESER_PRC = #{reserPrc}
+			WHERE
+				ROOM_NM = #{roomNm}
+			AND
+				RESER_DT = #{reserDt}
+	</update>
 </mapper>

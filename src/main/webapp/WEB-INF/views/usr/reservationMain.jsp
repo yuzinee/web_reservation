@@ -99,7 +99,15 @@
             initialView: 'dayGridMonth',
             events: events,
             eventClick: function(info) {
-                location.href = '';
+            	var roomNm = info.event.title;
+                var startDate = info.event.start;
+
+                // +1일
+                var adjustedDate = new Date(startDate);
+                adjustedDate.setDate(adjustedDate.getDate() + 1);
+                var formattedDate = adjustedDate.toISOString().split('T')[0];
+                
+                location.href = 'http://localhost:8083/usr/reservationList?startDate='+formattedDate;
             },
             displayEventTime: false
         });
