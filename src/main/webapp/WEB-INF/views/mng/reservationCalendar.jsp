@@ -5,6 +5,9 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 <meta charset="UTF-8">
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<link href="/css/com/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="/css/com/nav1.css">
+<link href="/css/com/carousel.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="/css/com/tab1.css">
 <link rel="stylesheet" type="text/css" href="/css/com/table1.css">
 <link rel="stylesheet" type="text/css" href="/css/com/calendar.css">
@@ -14,10 +17,27 @@
 <!-- bootstrap -->
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
 <title>title</title>
 </head>
 
 <body>
+	<header data-bs-theme="dark">
+	  <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+	    <div class="container-fluid">
+	      <div class="offcanvas-body">
+	        <ul class="navbar-nav col-md-auto mb-2 justify-content-center mb-md-0">
+	          <li class="nav-item"><a class="nav-link px-5" href="/mng/reservationCalendar">예약관리</a></li>
+	          <li class="nav-item"><a class="nav-link px-5" href="#">소개관리</a></li>
+	          <li class="nav-item"><a class="nav-link px-5" href="#">시설안내관리</a></li>
+	          <li class="nav-item"><a class="nav-link px-5" href="#">이용안내관리</a></li>
+	          <li class="nav-item"><a class="nav-link px-5" href="#">공지사항관리</a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+	</header>
+	
     <button id="btnOpen" style="display:none">예약 오픈</button>
     <div id='calendar'></div>
     
