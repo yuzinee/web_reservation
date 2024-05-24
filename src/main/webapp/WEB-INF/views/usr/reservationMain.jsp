@@ -124,7 +124,7 @@
 	                adjustedDate.setDate(adjustedDate.getDate() + 1);
 	                var formattedDate = adjustedDate.toISOString().split('T')[0];
 	                
-	                location.href = 'http://localhost:8083/usr/ㅣreservationList?startDate='+formattedDate;
+	                location.href = 'http://localhost:8083/usr/reservationList?startDate='+formattedDate;
 
                 }
               , displayEventTime: false
