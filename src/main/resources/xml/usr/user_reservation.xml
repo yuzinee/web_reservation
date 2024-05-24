@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="userReservationDAO">
+	<!-- 펜션 조회 -->
+	<select id="selectPnsData" resultType="Map" parameterType="String">
+        SELECT *
+FROM TB_PNS
+    </select>
+
 	<!-- 객실 조회 -->
     <select id="selectRoomList" resultType="Map" parameterType="String">
         SELECT *
