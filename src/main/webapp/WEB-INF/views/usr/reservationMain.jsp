@@ -7,21 +7,12 @@
 <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
 <link rel="stylesheet" type="text/css" href="/css/com/tab1.css">
 <link rel="stylesheet" type="text/css" href="/css/com/table1.css">
+<link rel="stylesheet" type="text/css" href="/css/com/calendar.css">
 <script src="/js/com/common.js"></script>
 <!-- Full Calendar -->
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 <title>title</title>
 </head>
-
-<style>
-    /* 캘린더 테이블 스타일 */
-    #calendar {
-        width: 100%;
-        height: 800px;
-        background-color: #ffffff;
-    }
-</style>
-
 <body>
     <div class="tab">
         <ul class="tabnav">
@@ -80,19 +71,16 @@
 	var calendar;
 
     $(document).ready(function() {
-        // Tab event
-        tabControl();
+        tabControl(); 			 	// 탭 이벤트
+        initializeCalendar([]);		// 캘린더 로드
         
-        // Calendar load
-        calendarLoad();
-
-        // open click
-        $('#openButton').click(function() {
-            insertMonthDates(calendar);
+        // 캘린더 버튼 이벤트 추가
+        $('.fc-today-button, .fc-prev-button, .fc-next-button').on('click', function() {
+        	selectReserList();
         }); 
     });
 
-    /* Tab event */
+    /* 탭 이벤트 */
     function tabControl() {
         $('.tabcontent > div').hide();
         $('.tabnav a').click(function () {
@@ -103,70 +91,44 @@
             return false;
         }).filter(':eq(0)').click();
     }
-	
-    /* Calendar load */
-    function calendarLoad(){
-    	var param = {
-      		"queryId" : "userReservationDAO.selectRoomListPayN"
-      	}
-      	
-      	com_selectList(param, function(reservationList) {
-      		var calendarEl = document.getElementById('calendar');
-            calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView	: 'dayGridMonth'
-              , events		: reservationList
-              , eventClick 	: function(info) {
-	                var roomNm = info.event.title;
-	                var startDate = info.event.start;
-	
-	                // +1일
-	                var adjustedDate = new Date(startDate);
-	                adjustedDate.setDate(adjustedDate.getDate() + 1);
-	                var formattedDate = adjustedDate.toISOString().split('T')[0];
-	                
-	                location.href = 'http://localhost:8083/usr/reservationList?startDate='+formattedDate;
-
-                }
-              , displayEventTime: false
-            });
-
-            calendar.render();
-      	})
-    }
-	
-    /* open click */
-    function insertMonthDates(calendar) {
-    	var today = calendar.getDate(); 
-        var start = new Date(today.getFullYear(), today.getMonth(), 2); 
-        var end = new Date(today.getFullYear(), today.getMonth() + 1, 1); 
-        var dates = [];
-        
-        for (var date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
-            dates.push(new Date(date));
-        }
-
-        var formattedDates = dates.map(function(date) {
-            return date.toISOString().split('T')[0];
+    
+    /* 캘린더 로드 */
+    function initializeCalendar(events) {
+        var calendarEl = document.getElementById('calendar');
+        calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: events,
+            eventClick: function(info) {
+                location.href = '';
+            },
+            displayEventTime: false
         });
-        
-        var selectParam = {
-            	"queryId" : "userReservationDAO.selectRoomList"
-            }
-            
-        com_selectList(selectParam, function(e){
-        	var room = e;
-        	
-        	var insertParam = {
-              	"queryId" 	: "userReservationDAO.insertReservationList"
-              , "room"	  	: room
-              , "date" 		: formattedDates
-            }
-              	
-            com_insert(insertParam);
-        })    
+
+        calendar.render();	// 캘린더 렌더링
+        selectReserList();	// 예약내역 조회
     }
     
-    /* 예약확인 및 취소 click */
+ 	/* 캘린더 events 추가 */
+    function addEventsToCalendar(events) {
+    	calendar.removeAllEvents();
+        calendar.addEventSource(events);
+    }
+ 	
+ 	/* 예약내역 조회 */
+ 	function selectReserList(){
+ 		var param = {
+            "queryId": "userReservationDAO.selectRoomListPayN",
+            "date": calendar.getDate().getFullYear() + '-' + ('0' + (calendar.getDate().getMonth() + 1)).slice(-2)
+        };
+
+        com_selectList(param, function(reservationList) {
+            if (reservationList.length > 0) {
+                addEventsToCalendar(reservationList);
+            }
+        });
+ 	}
+    
+    /* 예약확인 및 취소 클릭 */
     function btnConfirmOnclick(){
     	var param = {
     		"queryId" 	: "userReservationDAO.selectReservationConfirm"
@@ -195,7 +157,7 @@
     	})
     }
     
-    /* 예약취소 click */
+    /* 예약취소 클릭 */
     function btnCancelOnclick(){
     	var checkedRows = [];
 

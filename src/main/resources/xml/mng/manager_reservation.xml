@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="managerReservationDAO">
+	<!-- 예약 조회 -->
+	<select id="selectReserList" resultType="Map" parameterType="String">
+        SELECT 
+        	room_nm AS title
+	     ,  reser_dt AS date
+		FROM 
+			TB_RESER
+		WHERE
+			RESER_DT LIKE CONCAT(#{date}, '%')
+    </select>
+</mapper>

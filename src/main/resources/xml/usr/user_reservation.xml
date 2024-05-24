@@ -4,7 +4,7 @@
 	<!-- 펜션 조회 -->
 	<select id="selectPnsData" resultType="Map" parameterType="String">
         SELECT *
-FROM TB_PNS
+	FROM TB_PNS
     </select>
 
 	<!-- 객실 조회 -->
@@ -36,15 +36,14 @@ FROM TB_PNS
     <!-- 예약할 수 있는 객실 조회 -->
     <select id="selectRoomListPayN" resultType="Map" parameterType="String">
 	    SELECT 
-	    	room_nm AS title
+        	room_nm AS title
 	     ,  reser_dt AS date
-		FROM
+		FROM 
 			TB_RESER
 		WHERE
 			PAY_YN = 'N'
-		<if test="startDate != null">
-	        AND reser_dt = #{startDate}
-	    </if>
+		AND
+			RESER_DT LIKE CONCAT(#{date}, '%')
 	</select>
 	
 	<!-- 날짜별 객실 조회 -->

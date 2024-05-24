@@ -1,0 +1,6 @@
+	/* 캘린더 테이블 스타일 */
+    #calendar {
+        width: 100%;
+        height: 800px;
+        background-color: #ffffff;
+    }
